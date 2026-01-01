@@ -16,13 +16,13 @@ class Subscriber(Base):
     # index 생성 : 처리건수 늘어날수록 효과적.
     id = Column(Integer, primary_key=True, index=True)
     
-    # unique=True: 중복된 이메일이 들어오면 에러를 발생시켜 막습니다.
+    # unique=True: 중복된 이메일체크용도
     email = Column(String, unique=True, index=True, nullable=False)
     
     name = Column(String, nullable=True)
-    is_active = Column(Boolean, default=True) # 구독 취소 시 False로 변경
+    is_active = Column(Boolean, default=True) # 구독 취소 시 False로 변경 : 이슈 검토
     
-    # server_default=func.now(): 데이터 생성 시 현재 시간이 자동으로 들어갑니다.
+    # server_default=func.now(): 타임스탬프처리
     subscribed_at = Column(DateTime(timezone=True), server_default=func.now())
     unsubscribed_at = Column(DateTime(timezone=True), nullable=True)
 
@@ -37,13 +37,13 @@ class CrawledArticle(Base):
     title = Column(String, index=True)
     link = Column(String, unique=True, index=True)  # 'original_url' 대신 'link'로 통일
     content = Column(Text)
-    summary = Column(Text, nullable=True) # AI가 요약한 내용
+    summary = Column(Text, nullable=True) # 제미나이 요약한 내용
     status = Column(String, default="PENDING") # PENDING, DONE, ERROR
     created_at = Column(DateTime, default=datetime.now)
 
 
 # ========================================================
-# 3. 뉴스레터 테이블 (Newsletters) - 1회 발송분
+# 3. 뉴스레터 테이블 (Newsletters) - 1회 발송분만 우선 처리
 # ========================================================
 class Newsletter(Base):
     __tablename__ = "newsletters"
